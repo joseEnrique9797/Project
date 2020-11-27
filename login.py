@@ -7,6 +7,7 @@
 """
 
 from tkinter import *
+from tkinter import messagebox 
 
 """
     loginGUI: Objeto para crear una ventana de Login
@@ -75,8 +76,10 @@ class loginGUI:
         userName = self.TUsernamme.get()
         password = self.TPassword.get()
         
-        print(userName)
-        print(password)
+        if userName=="admin" and password=="admin":
+            messagebox.showinfo('Éxito', 'El login fue exitoso')
+        else:
+            messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
 
     """
         run: Ejecuta la venta de Login
