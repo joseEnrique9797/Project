@@ -8,6 +8,7 @@
 
 from tkinter import *
 from tkinter import messagebox 
+from Draw import *
 
 """
     loginGUI: Objeto para crear una ventana de Login
@@ -76,8 +77,18 @@ class loginGUI:
         userName = self.TUsernamme.get()
         password = self.TPassword.get()
         
+        #Si el usuario Existe abrimos el canvas
         if userName=="admin" and password=="admin":
-            messagebox.showinfo('Éxito', 'El login fue exitoso')
+
+            #Se cierra el LoginGUI
+            self.app.destroy()
+            print("Login App Executed Successfully.")
+
+            #Se Ejecuta el llamado a la aplicación de Dibujo
+            root = tkinter.Tk()  
+            drawingApp = DrawingApplication(root)
+            drawingApp.run()
+
         else:
             messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
 
