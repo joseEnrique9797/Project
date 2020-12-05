@@ -172,12 +172,14 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
 # This class defines the drawing application. The following line says that
 # the DrawingApplication class inherits from the Frame class. This means
 class DrawingApplication(tkinter.Frame):
-    def __init__(self, master=None):
+
+    def __init__(self, master=None, userType=0):
         super().__init__(master)
+        self.userType = userType
         self.pack()
         self.buildWindow()    
         self.graphicsCommands = GraphicsSequence()
- 
+        
     # This method is called to create all the widgets, place them in the GUI,
     # and define the event handlers for the application.
     def buildWindow(self):
@@ -253,9 +255,14 @@ class DrawingApplication(tkinter.Frame):
             for cmd in self.graphicsCommands:
                 cmd.draw(theTurtle)
                 
-            screen.update()            
-        
-        fileMenu.add_command(label="Load Into...",command=addToFile)
+            screen.update() 
+
+        # Aqui se de debe ingresar la función que hará el llamado a la ventana de administración de Usuarios
+        fileMenu.add_command(label="Configure",command=None)
+
+        # Si el usuario no es Administrador entonces se deshabilita el menu de configuración
+        if self.userType == 0:
+            fileMenu.entryconfig(2,state="disabled")
         
         def saveFile():
             filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
@@ -263,6 +270,8 @@ class DrawingApplication(tkinter.Frame):
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         
+        #Aquí se debe aregregar el comando para descargar el dibujo desde la base de datos de Backup.
+        fileMenu.add_command(label="Download",command=None)
 
         fileMenu.add_command(label="Exit",command=self.master.quit)
         

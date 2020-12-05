@@ -9,6 +9,7 @@
 from tkinter import *
 from tkinter import messagebox 
 from Draw import *
+from MySQLEngine import *
 
 """
     loginGUI: Objeto para crear una ventana de Login
@@ -77,20 +78,29 @@ class loginGUI:
         userName = self.TUsernamme.get()
         password = self.TPassword.get()
         
-        #Si el usuario Existe abrimos el canvas
-        if userName=="admin" and password=="admin":
+        SQLEngine = MySQLEngine()
+        SQLEngine.start()
 
-            #Se cierra el LoginGUI
-            self.app.destroy()
-            print("Login App Executed Successfully.")
+        #Consulta SQL para buscar al usuario 
+        result = SQLEngine.select("SELECT User.var_nickName, User.var_password,User.bit_admin FROM User WHERE User.var_nickName LIKE '%s';" % userName)
 
-            #Se Ejecuta el llamado a la aplicación de Dibujo
-            root = tkinter.Tk()  
-            drawingApp = DrawingApplication(root)
-            drawingApp.run()
+        #Se cierra la conexión con la base de datos
+        SQLEngine.close()
 
+        #Si se encuentra un usuario se procede a verificar que la contraseña sea la misma
+        if result:
+            if result[0][1] == password:
+                self.app.destroy()
+                print("Login Executed Successfully.")
+
+                #Se Ejecuta el llamado a la aplicación de Dibujo
+                root = tkinter.Tk()  
+                drawingApp = DrawingApplication(root,result[0][2])
+                drawingApp.run()
+            else:
+                messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
         else:
-            messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
+            messagebox.showerror('Error', 'El Usuario no Existe')
 
     """
         run: Ejecuta la venta de Login

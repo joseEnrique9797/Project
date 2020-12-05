@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <GraphicsCommands>
     <Command x="-121.0" y="117.0" width="1" color="#000000">GoTo</Command>
+    
     {
-        "1": {
+        1: {
             "command":"GoTo",
             "x":"-121.0",
-            
+            "y":"117.0",
+            "width":"1",
+            "color":"#000000"
+        },
+        2: {
+            "command":"Circle",
+            "width":"1",
+            "color":"#000000"
+        },
+        3: {
+            "command":"BeginFill",
+            "color":"#000000"
+        },
+        4: {
+            "command":"EndFill",
+            "color":"#000000"
         }
     }
+
     <Command x="113.0" y="117.0" width="1" color="#000000">GoTo</Command>
     <Command x="-2.0" y="3.0" width="1" color="#000000">GoTo</Command>
     <Command radius="50" width="1" color="#000000">Circle</Command>
