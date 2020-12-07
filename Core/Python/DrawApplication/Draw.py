@@ -122,22 +122,18 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
     def write(self,filename):
         xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<GraphicsCommands>\n"
 
-        #file = open(filename, "w")
-        #file.write('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n')
-        #file.write('<GraphicsCommands>\n')
-
         for cmd in self:
             xml += '    '+str(cmd)+"\n"
-            #file.write('    '+str(cmd)+"\n")
             
         xml += '</GraphicsCommands>\n'
-        #file.write('</GraphicsCommands>\n')
-            
-        #file.close()  
+ 
         print(xml)
         converter = XMLtoJSON()
         json = converter.process(xml)
         print(json)
+
+        #Una vez convertido a JSON, se debe hacer el query para guardarlo en la base de datos
+        #Se debe pasar otro parametro overwrite para especificar el query a realizar
 
         # Aqui voy a llamar a load y le paso el json para probar la integridad
         self.parse(json)
@@ -146,6 +142,7 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
     def parse(self,data):
         convert = JSONtoXML()
         xmlString = convert.createXML(data)
+        # Aqui se imprime el xml para probar su integridad
         print(xmlString)
         xmldoc = xml.dom.minidom.parseString(xmlString)
         
@@ -243,6 +240,8 @@ class DrawingApplication(tkinter.Frame):
             self.graphicsCommands = GraphicsSequence()
             
             # calling parse will read the graphics commands from the file.
+
+            #Aqui se debe realizar el query para obtener el json y luego mandarlo al parser
             self.graphicsCommands.parse(filename)
                
             for cmd in self.graphicsCommands:
@@ -285,6 +284,11 @@ class DrawingApplication(tkinter.Frame):
         
         def saveFile():
             filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
+
+            # Aqui se debe agregar la ventana con el nombre del archivo, en caso de ya existir el archivo este
+            # debe sobreescribirse
+
+            #Aqui se llama al write para que convierta el XML a JSON
             self.graphicsCommands.write(filename)
             
         fileMenu.add_command(label="Save As...",command=saveFile)

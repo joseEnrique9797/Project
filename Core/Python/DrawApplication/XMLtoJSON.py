@@ -11,13 +11,6 @@ import re
 import json
 
 class XMLtoJSON: 
-    """
-    def __init__(self, xmlFilename):
-        self.jsonFilename = "recovered"+xmlFilename.replace('.xml', '.json')
-        self.xmlFilename = xmlFilename
-
-        self.process()
-    """
 
     def __init__(self):
         pass
@@ -46,15 +39,12 @@ class XMLtoJSON:
         match = re.search(r'>[a-zA-Z]+<', tag).group()
         return (match.replace(">", "")).replace("<", "")
 
-    #Arreglo con todas las etiquetas del archivo XML
-    
+    #Arreglo con todas las etiquetas del archivo XML   
     def tags(self,data): 
-        #f = open(self.xmlFilename, 'r')
 
         tags = data.split("\n")
         tags = tags[2:len(tags)-2]
 
-        #f.close()
         return tags
 
     #Genera un objeto JSON a partir de un diccionario llamado xml
