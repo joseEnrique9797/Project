@@ -95,7 +95,7 @@ class loginGUI:
 
                 #Se Ejecuta el llamado a la aplicación de Dibujo
                 root = tkinter.Tk()  
-                drawingApp = DrawingApplication(root,result[0][3])
+                drawingApp = DrawingApplication(root,result[0][3],result[0][0])
                 drawingApp.run()
             else:
                 messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')

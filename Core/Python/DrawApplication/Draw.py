@@ -6,6 +6,8 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import xml.dom.minidom
+from Core.Python.DrawApplication.XMLtoJSON import *
+from Core.Python.DrawApplication.JSONtoXML import *
 
 # The following classes define the different commands that 
 # are supported by the drawing application. 
@@ -28,9 +30,9 @@ class GoToCommand:
     # version of the command is how it appears in the graphics
     # file format. 
     def __str__(self):
-        return '<Command x="' + str(self.x) + '" y="' + str(self.y) + \
-               '" width="' + str(self.width) \
-               + '" color="' + self.color + '">GoTo</Command>' 
+        return '<Command x=\"' + str(self.x) + '\" y=\"' + str(self.y) + \
+               '\" width=\"' + str(self.width) \
+               + '\" color=\"' + self.color + '\">GoTo</Command>' 
         
 class CircleCommand:
     def __init__(self,radius, width=1,color="black"):
@@ -44,8 +46,8 @@ class CircleCommand:
         turtle.circle(self.radius)
         
     def __str__(self):
-        return '<Command radius="' + str(self.radius) + '" width="' + \
-               str(self.width) + '" color="' + self.color + '">Circle</Command>'
+        return '<Command radius=\"' + str(self.radius) + '\" width=\"' + \
+               str(self.width) + '\" color=\"' + self.color + '\">Circle</Command>'
         
 class BeginFillCommand:
     def __init__(self,color):
@@ -56,7 +58,7 @@ class BeginFillCommand:
         turtle.begin_fill()
         
     def __str__(self):
-        return '<Command color="' + self.color + '">BeginFill</Command>'
+        return '<Command color=\"' + self.color + '\">BeginFill</Command>'
         
 class EndFillCommand:
     def __init__(self):
@@ -115,20 +117,37 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
         return len(self.gcList)
         
     # The write method writes an XML file to the given filename
-    def write(self,filename): #Aqui se escribe el dibujo en xml
-        file = open(filename, "w")
-        file.write('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n')
-        file.write('<GraphicsCommands>\n')
+
+    #Aqui se escribe el dibujo en xml, pero en vez de eso se convertira a JSON y se enviará a la base de datos
+    def write(self,filename):
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<GraphicsCommands>\n"
+
+        #file = open(filename, "w")
+        #file.write('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n')
+        #file.write('<GraphicsCommands>\n')
+
         for cmd in self:
-            file.write('    '+str(cmd)+"\n")
+            xml += '    '+str(cmd)+"\n"
+            #file.write('    '+str(cmd)+"\n")
             
-        file.write('</GraphicsCommands>\n')
+        xml += '</GraphicsCommands>\n'
+        #file.write('</GraphicsCommands>\n')
             
-        file.close()  
+        #file.close()  
+        print(xml)
+        converter = XMLtoJSON()
+        json = converter.process(xml)
+        print(json)
+
+        # Aqui voy a llamar a load y le paso el json para probar la integridad
+        self.parse(json)
         
     # The parse method adds the contents of an XML file to this sequence
-    def parse(self,filename):
-        xmldoc = xml.dom.minidom.parse(filename)
+    def parse(self,data):
+        convert = JSONtoXML()
+        xmlString = convert.createXML(data)
+        print(xmlString)
+        xmldoc = xml.dom.minidom.parseString(xmlString)
         
         graphicsCommandsElement = xmldoc.getElementsByTagName("GraphicsCommands")[0]
         
@@ -173,7 +192,7 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
 # the DrawingApplication class inherits from the Frame class. This means
 class DrawingApplication(tkinter.Frame):
 
-    def __init__(self, master=None, userType=0):
+    def __init__(self, master=None, userType=0,userId=None):
         super().__init__(master)
         self.userType = userType
         self.pack()

@@ -14,10 +14,10 @@ import re
 
 class JSONtoXML: 
 
-    def __init__(self, jsonFilename): 
-        self.xmlFilename = "recovered"+jsonFilename.replace('.json', '.xml')
+    def __init__(self): 
+        #self.xmlFilename = "recovered"+jsonFilename.replace('.json', '.xml')
         #carga el documento JSON como un diccionario
-        self.jsonFile = json.load(open(jsonFilename,encoding="utf8"))
+        #self.jsonFile = json.load(open(jsonFilename,encoding="utf8"))
         # Crea un árbol de la estructura xml
         self.root = xmlTree.Element('GraphicsCommands')     
 
@@ -34,16 +34,25 @@ class JSONtoXML:
         command.text = tag
         return command
 
-    def createXML(self): 
-        for i in range(0, len( self.jsonFile) ): 
+    def createXML(self,data): 
+        dictionary = json.loads(data)
+        for i in range(0, len(dictionary) ): 
 
             self.root.append( 
-                    self.processJSON( self.jsonFile[str(i)] ) 
+                    self.processJSON( dictionary[str(i)] ) 
                 )
         
         #objeto (xml.etree.ElementTree) con todos los nodos del documento XML final
         tree = xmlTree.ElementTree(self.root)
-
+        tree = tree.getroot()
         #Crea el archivo XML en memoria
+        """
         with open(self.xmlFilename, "wb") as files: 
             tree.write(files)
+        """
+        xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"+xmlTree.tostring(tree).decode()
+        xmlString = xmlString.replace("<GraphicsCommands>","<GraphicsCommands>\n")
+        xmlString = xmlString.replace("</Command>","</Command>\n")
+        xmlString = xmlString.replace("<Command","    <Command")
+
+        return xmlString
