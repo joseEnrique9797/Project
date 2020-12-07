@@ -6,20 +6,30 @@ CREATE TABLE IF NOT EXISTS User(
     id INT AUTO_INCREMENT PRIMARY KEY,
     var_userName VARCHAR(200) NOT NULL COMMENT "nombre para el usuario",
     var_password VARCHAR(200) NOT NULL COMMENT "contraseña para el usuario",
-    bit_admin bit not null COMMENT "define si el usuario es administrador",
+    bit_admin bit NOT NULL COMMENT "define si el usuario es administrador",
     enu_state ENUM('inactive','active') DEFAULT 'active' COMMENT "Se asigna un estado al usuario para simular el estado de activo y eliminado(inactivo)",
     CONSTRAINT user_nameID UNIQUE(var_userName)
 );
 
+CREATE TABLE IF NOT EXISTS canvas_config(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    var_pen_color VARCHAR(20), 
+    var_fill_color VARCHAR(20)
+);
+
+    
 CREATE TABLE IF NOT EXISTS Action_type(
     id INT AUTO_INCREMENT PRIMARY KEY,
     var_description VARCHAR(200) COMMENT "Describe el tipo de accion que se registrara en la bitacora."
 );
 
-    
+
+
 CREATE TABLE IF NOT EXISTS Draw(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    jso_data JSON COMMENT "Almacenara la informacion correspondiente de la imagen en formato JSON"
+    var_name VARCHAR(200) NOT NULL COMMENT "El nombre que tendra la imagen, servira para identificarla",
+    jso_data JSON COMMENT "Almacenara la informacion correspondiente de la imagen en formato JSON",
+    CONSTRAINT name_draw UNIQUE(var_name)
 );
     
 CREATE TABLE IF NOT EXISTS Library(
