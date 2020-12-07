@@ -423,7 +423,16 @@ class DrawingApplication(tkinter.Frame):
             self.graphicsCommands.append(cmd)
 
         penDownButton = tkinter.Button(sideBar, text = "Pen Down", command=penDownHandler)
-        penDownButton.pack(fill=tkinter.BOTH)          
+        penDownButton.pack(fill=tkinter.BOTH)
+
+        # Aqui se de debe ingresar la función que hará el llamado a la ventana de administración de Usuarios
+        colorConfig = tkinter.Button(sideBar, text = "Set Default Color", command=None)
+        colorConfig.pack(fill=tkinter.BOTH)
+
+        # Si el usuario no es Administrador entonces se deshabilita el menu de configuración
+        if self.userType == 0:
+            colorConfig['state']= tkinter.DISABLED
+            #fileMenu.entryconfig(2,state="disabled")          
 
         # Here is another event handler. This one handles mouse clicks on the screen.
         def clickHandler(x,y): 

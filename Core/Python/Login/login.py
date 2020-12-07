@@ -82,20 +82,20 @@ class loginGUI:
         SQLEngine.start()
 
         #Consulta SQL para buscar al usuario 
-        result = SQLEngine.select("SELECT User.var_nickName, User.var_password,User.bit_admin FROM User WHERE User.var_nickName LIKE '%s';" % userName)
+        result = SQLEngine.select("SELECT User.id,User.var_userName, User.var_password,User.bit_admin,User.enu_state FROM User WHERE User.var_userName LIKE '%s';" % userName)
 
         #Se cierra la conexión con la base de datos
         SQLEngine.close()
 
         #Si se encuentra un usuario se procede a verificar que la contraseña sea la misma
         if result:
-            if result[0][1] == password:
+            if result[0][2] == password and result[0][4] == "active":
                 self.app.destroy()
                 print("Login Executed Successfully.")
 
                 #Se Ejecuta el llamado a la aplicación de Dibujo
                 root = tkinter.Tk()  
-                drawingApp = DrawingApplication(root,result[0][2])
+                drawingApp = DrawingApplication(root,result[0][3])
                 drawingApp.run()
             else:
                 messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
