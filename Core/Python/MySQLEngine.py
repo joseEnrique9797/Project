@@ -3,7 +3,7 @@
 """
     @author: Alexis
     @date: 04/12/2020
-    @version: 1.0
+    @version 1.0
 """
 
 # Para instalar el conector de mysql en python
@@ -26,7 +26,7 @@ class MySQLEngine:
         config = configparser.ConfigParser()
 
         # Se lee el archivo de configuración config.ini
-        config.read('config.ini')
+        config.read('Core/Scripts/config.ini')
 
         # Se recuperan los valores de configuración desde el objeto config
         self.host = config.get('MariaDB Server','host')

@@ -1,15 +1,15 @@
 # -*- coding:utf-8 -*-
 
 """
-    @author: Lexer
+    @author: Alexis
     @date: 27/11/2020
     @version 1.0
 """
 
 from tkinter import *
 from tkinter import messagebox 
-from Draw import *
-from MySQLEngine import *
+from Core.Python.DrawApplication.Draw import *
+from Core.Python.MySQLEngine import *
 
 """
     loginGUI: Objeto para crear una ventana de Login

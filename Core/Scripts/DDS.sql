@@ -1,8 +1,6 @@
-DROP DATABASE IF EXISTS ProyectBD1;
-CREATE DATABASE IF NOT EXISTS ProyectBD1 CHARACTER SET utf8;
-USE ProyectBD1;
-
-    
+DROP DATABASE IF EXISTS ProjectBD1;
+CREATE DATABASE IF NOT EXISTS ProjectBD1 CHARACTER SET utf8;
+USE ProjectBD1;
 
 CREATE TABLE IF NOT EXISTS User(
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,6 +40,6 @@ CREATE TABLE IF NOT EXISTS Binnacle(
     FOREIGN KEY (int_id_action_type) REFERENCES Action_type(id)
 );
 
-    
+USE ProjectBD1;
 
-    
+INSERT INTO User (var_userName,var_password,bit_admin) VALUES ("admin","admin",1);
