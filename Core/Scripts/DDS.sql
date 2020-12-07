@@ -23,8 +23,6 @@ CREATE TABLE IF NOT EXISTS Action_type(
     var_description VARCHAR(200) COMMENT "Describe el tipo de accion que se registrara en la bitacora."
 );
 
-
-
 CREATE TABLE IF NOT EXISTS Draw(
     id INT AUTO_INCREMENT PRIMARY KEY,
     var_name VARCHAR(200) NOT NULL COMMENT "El nombre que tendra la imagen, servira para identificarla",

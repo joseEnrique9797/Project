@@ -60,8 +60,14 @@ class MySQLEngine:
         @param query: Es una consulta SQL.
     """
     def select(self,query):
-        self.link.execute(query)
+        self.link.execute(query,multi=True)
         return self.link.fetchall()
+
+    def insert(self,query):
+        self.link.execute(query,multi=True)
+        self.conector.commit()
+        print("Data Inserted Successfully")
+        return self.link.lastrowid
 
     """
         close cierra la conexión hacia la base de datos.

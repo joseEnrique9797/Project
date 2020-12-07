@@ -8,6 +8,7 @@ import tkinter.filedialog
 import xml.dom.minidom
 from Core.Python.DrawApplication.XMLtoJSON import *
 from Core.Python.DrawApplication.JSONtoXML import *
+from ..MySQLEngine import *
 
 # The following classes define the different commands that 
 # are supported by the drawing application. 
@@ -119,7 +120,7 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
     # The write method writes an XML file to the given filename
 
     #Aqui se escribe el dibujo en xml, pero en vez de eso se convertira a JSON y se enviará a la base de datos
-    def write(self,filename):
+    def write(self,filename,userId):
         xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<GraphicsCommands>\n"
 
         for cmd in self:
@@ -127,17 +128,26 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
             
         xml += '</GraphicsCommands>\n'
  
-        print(xml)
         converter = XMLtoJSON()
         json = converter.process(xml)
+        
         print(json)
+
+        #Queries
+        SQLEngine = MySQLEngine()
+        SQLEngine.start()
+
+        #Se guarda el dibujo, y se obtiene el id del registro agregado
+        drawId = SQLEngine.insert("INSERT INTO Draw(var_name, jso_data) VALUES ('%s','%s');" % (filename,json))
+
+        #Se inserta la referencia en la Libreria del Usuario
+        SQLEngine.insert("INSERT INTO Library(id_action_type,int_id_user,int_id_draw) VALUES (0,%s,%s);" % (userId,drawId))
+        SQLEngine.close()
 
         #Una vez convertido a JSON, se debe hacer el query para guardarlo en la base de datos
         #Se debe pasar otro parametro overwrite para especificar el query a realizar
 
-        # Aqui voy a llamar a load y le paso el json para probar la integridad
-        self.parse(json)
-        
+
     # The parse method adds the contents of an XML file to this sequence
     def parse(self,data):
         convert = JSONtoXML()
@@ -192,6 +202,7 @@ class DrawingApplication(tkinter.Frame):
     def __init__(self, master=None, userType=0,userId=None):
         super().__init__(master)
         self.userType = userType
+        self.userId = userId
         self.pack()
         self.buildWindow()    
         self.graphicsCommands = GraphicsSequence()
@@ -289,7 +300,7 @@ class DrawingApplication(tkinter.Frame):
             # debe sobreescribirse
 
             #Aqui se llama al write para que convierta el XML a JSON
-            self.graphicsCommands.write(filename)
+            self.graphicsCommands.write(filename,self.userId)
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         

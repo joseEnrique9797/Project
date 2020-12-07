@@ -83,7 +83,9 @@ class loginGUI:
 
         #Consulta SQL para buscar al usuario 
         result = SQLEngine.select("SELECT User.id,User.var_userName, User.var_password,User.bit_admin,User.enu_state FROM User WHERE User.var_userName LIKE '%s';" % userName)
-
+        SQLEngine.conector.commit()
+        SQLEngine.link.reset()
+        
         #Se cierra la conexión con la base de datos
         SQLEngine.close()
 
