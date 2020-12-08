@@ -165,7 +165,6 @@ class userManagerGUI:
         
         self.SQLEngine.start()
         results = self.SQLEngine.select("SELECT * FROM User;")
-        print(results)
         self.SQLEngine.close()
 
         for result in results:

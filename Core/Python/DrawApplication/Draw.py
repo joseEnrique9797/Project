@@ -7,10 +7,10 @@ import tkinter.colorchooser
 import tkinter.filedialog
 import xml.dom.minidom
 from Core.Python.DrawApplication.XMLtoJSON import *
-from Core.Python.DrawApplication.SaveView import *
 from Core.Python.DrawApplication.JSONtoXML import *
 from ..MySQLEngine import *
 from ..UserManager.mainView import *
+from tkinter.simpledialog import askstring
 
 # The following classes define the different commands that 
 # are supported by the drawing application. 
@@ -133,8 +133,6 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
         converter = XMLtoJSON()
         json = converter.process(xml)
         
-        #print(json)
-
         #Queries
         SQLEngine = MySQLEngine()
         SQLEngine.start()
@@ -301,19 +299,8 @@ class DrawingApplication(tkinter.Frame):
             fileMenu.entryconfig(2,state="disabled")
         
         def saveFile():
-            #filename = tkinter.filedialog.asksaveasfilename(title="Save Picture As...")
-            filename = SaveWindow()
-            result = filename.run()
-
-            if result != None:
-                self.graphicsCommands.write(result,self.userId)
-                
-            # Aqui se debe agregar la ventana con el nombre del archivo, en caso de ya existir el archivo este
-            # debe sobreescribirse
-
-            #Aqui se llama al write para que convierta el XML a JSON
-
-            
+            filename = simpledialog.askstring(title = "Save As...",prompt = "Guardar archivo como: ")
+            self.graphicsCommands.write(filename,self.userId)
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         
