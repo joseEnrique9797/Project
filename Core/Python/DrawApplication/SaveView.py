@@ -42,8 +42,9 @@ class SaveWindow:
 
     def SaveFinish(self):
         if len(self.FileName.get()) > 0:
+            value = self.FileName.get()
             self.window.destroy()
-            return self.FileName.get()
+            return value
         else:
             messagebox.showwarning("Erro","El archivo debe tener un nombre")
 
