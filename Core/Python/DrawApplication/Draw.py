@@ -9,6 +9,7 @@ import xml.dom.minidom
 from Core.Python.DrawApplication.XMLtoJSON import *
 from Core.Python.DrawApplication.JSONtoXML import *
 from ..MySQLEngine import *
+from ..UserManager.mainView import *
 
 # The following classes define the different commands that 
 # are supported by the drawing application. 
@@ -286,8 +287,13 @@ class DrawingApplication(tkinter.Frame):
                 
             screen.update() 
 
+        def adminUsers():
+            self.master.withdraw()
+            adminUserGUI = userManagerGUI(draw=self.master)
+            adminUserGUI.run()
+
         # Aqui se de debe ingresar la función que hará el llamado a la ventana de administración de Usuarios
-        fileMenu.add_command(label="Configure",command=None)
+        fileMenu.add_command(label="Configure",command=adminUsers)
 
         # Si el usuario no es Administrador entonces se deshabilita el menu de configuración
         if self.userType == 0:

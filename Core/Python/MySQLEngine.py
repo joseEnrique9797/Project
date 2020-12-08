@@ -59,9 +59,13 @@ class MySQLEngine:
         select es la función encargada de realizar las consultas requeridas.
         @param query: Es una consulta SQL.
     """
-    def select(self,query):
+    def select(self,query,fetchOne=False):
         self.link.execute(query,multi=True)
-        return self.link.fetchall()
+        
+        if fetchOne:
+            return self.link.fetchone()
+        else:
+            return self.link.fetchall()
 
     def insert(self,query):
         self.link.execute(query,multi=True)
