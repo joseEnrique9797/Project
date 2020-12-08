@@ -12,17 +12,19 @@ from tkinter import ttk
 from tkinter import messagebox 
 #from Draw import *
 from  Core.Python.MySQLEngine import * 
+import json
 
 """
     loginGUI: Objeto para crear una ventana de Login
 """
-class loginGUI:
+class loadGUI:
 
     """
         Constructor para el objeto loginGUI
     """
     def __init__(self,user_id):
         self.app = Tk()
+        self.data = None
 
         #Título de la ventana
         self.app.title('Load')
@@ -73,6 +75,7 @@ class loginGUI:
     
     def close_window(self):
         self.app.destroy() 
+        self.app.quit()
     
     def load(self):
         imageName = self.combo.get()
@@ -81,12 +84,9 @@ class loginGUI:
         else:
             SQLEngine = MySQLEngine()
             SQLEngine.start()
-            result = SQLEngine.select("SELECT * FROM Draw WHERE var_name = '%s';" % imageName)
-
-        print('True-------------------',result)
-        
-        
-
+            self.data = SQLEngine.select("SELECT jso_data FROM Draw WHERE var_name = '%s';" % imageName,fetchOne=True)[0]
+            SQLEngine.close()
+            self.close_window()
     
     def run(self):
         self.app.mainloop()

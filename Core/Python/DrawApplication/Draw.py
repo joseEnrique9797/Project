@@ -10,6 +10,7 @@ from Core.Python.DrawApplication.XMLtoJSON import *
 from Core.Python.DrawApplication.JSONtoXML import *
 from ..MySQLEngine import *
 from ..UserManager.mainView import *
+from Core.Python.DrawApplication.load import *
 from tkinter.simpledialog import askstring
 
 # The following classes define the different commands that 
@@ -152,8 +153,7 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
     def parse(self,data):
         convert = JSONtoXML()
         xmlString = convert.createXML(data)
-        # Aqui se imprime el xml para probar su integridad
-        print(xmlString)
+        
         xmldoc = xml.dom.minidom.parseString(xmlString)
         
         graphicsCommandsElement = xmldoc.getElementsByTagName("GraphicsCommands")[0]
@@ -242,18 +242,18 @@ class DrawingApplication(tkinter.Frame):
         fileMenu.add_command(label="New",command=newWindow)
             
         def loadFile():
-
-            filename = tkinter.filedialog.askopenfilename(title="Select a Graphics File")
             
             newWindow()
             
+            load = loadGUI(self.userId)
+            load.run()
+
             # This re-initializes the sequence for the new picture. 
-            self.graphicsCommands = GraphicsSequence()
-            
             # calling parse will read the graphics commands from the file.
+            self.graphicsCommands = GraphicsSequence()
 
             #Aqui se debe realizar el query para obtener el json y luego mandarlo al parser
-            self.graphicsCommands.parse(filename)
+            self.graphicsCommands.parse(load.data)
                
             for cmd in self.graphicsCommands:
                 cmd.draw(theTurtle)
