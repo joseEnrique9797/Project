@@ -31,7 +31,7 @@ class SaveWindow:
         
 
         #TextBox que recolecte el nombre con el que se guardara el proyecto
-        Label(self.window, text='Escriba el nombre con el que guardara el proyecto').place(x=15,y=25)
+        Label(self.window, text='Guardar archivo como').place(x=15,y=25)
         self.FileName = StringVar()
         self.FileName = Entry(self.window, textvariable=self.FileName)
         self.FileName.place(x=20, y=60, width=300)
@@ -42,12 +42,14 @@ class SaveWindow:
 
     def SaveFinish(self):
         if len(self.FileName.get()) > 0:
-            print("OK")
+            self.window.destroy()
+            return self.FileName.get()
         else:
             messagebox.showwarning("Erro","El archivo debe tener un nombre")
 
     def SaveCancell(self):
         self.window.destroy()
+        return None
 
     """
         run: Ejecuta la venta de permitsistracion de usuarios
