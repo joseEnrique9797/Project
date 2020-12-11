@@ -73,6 +73,14 @@ class MySQLEngine:
         print("Data Inserted Successfully")
         return self.link.lastrowid
 
+    def callProcedure(self,name,*args,fetchOne=False)
+        self.link.callproc(name,args)
+
+        if fetchOne:
+            return self.link.fetchone()
+        else:
+            return self.link.fetchall()
+
     """
         close cierra la conexión hacia la base de datos.
     """

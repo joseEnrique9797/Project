@@ -142,11 +142,10 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
         drawId = SQLEngine.insert("INSERT INTO Draw(var_name, jso_data) VALUES ('%s','%s');" % (filename,json))
 
         #Se inserta la referencia en la Libreria del Usuario
-        SQLEngine.insert("INSERT INTO Library(id_action_type,int_id_user,int_id_draw) VALUES (0,%s,%s);" % (userId,drawId))
+        SQLEngine.insert("INSERT INTO Library(int_id_user,int_id_draw) VALUES (%s,%s);" % (userId,drawId))
         SQLEngine.close()
 
-        #Una vez convertido a JSON, se debe hacer el query para guardarlo en la base de datos
-        #Se debe pasar otro parametro overwrite para especificar el query a realizar
+        #Antes de cerrar la conexión se debe guardar en 'paralelo' en la base de datos B
 
 
     # The parse method adds the contents of an XML file to this sequence
