@@ -22,11 +22,11 @@ class MySQLEngine:
     """ 
         Constructor 
     """
-    def __init__(self):
+    def __init__(self,configFile='config.ini'):
         config = configparser.ConfigParser()
 
         # Se lee el archivo de configuración config.ini
-        config.read('Core/Scripts/config.ini')
+        config.read('Core/Scripts/%s' % configFile)
 
         # Se recuperan los valores de configuración desde el objeto config
         self.host = config.get('MariaDB Server','host')
@@ -73,7 +73,7 @@ class MySQLEngine:
         print("Data Inserted Successfully")
         return self.link.lastrowid
 
-    def callProcedure(self,name,*args,fetchOne=False)
+    def callProcedure(self,name,*args,fetchOne=False):
         self.link.callproc(name,args)
 
         if fetchOne:

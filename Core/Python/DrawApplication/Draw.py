@@ -10,6 +10,7 @@ from Core.Python.DrawApplication.XMLtoJSON import *
 from Core.Python.DrawApplication.JSONtoXML import *
 from ..MySQLEngine import *
 from ..UserManager.mainView import *
+from ..Compress.compress import *
 from Core.Python.DrawApplication.load import *
 from tkinter.simpledialog import askstring
 
@@ -128,12 +129,16 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
 
         for cmd in self:
             xml += '    '+str(cmd)+"\n"
-            
         xml += '</GraphicsCommands>\n'
  
         converter = XMLtoJSON()
         json = converter.process(xml)
-        
+        print(json)
+
+        #Objeto json Comprimido
+        compressor = jsonCompress(filename,userId)
+        jsonCompressed = compressor.jsonZip(json)
+
         #Queries
         SQLEngine = MySQLEngine()
         SQLEngine.start()
@@ -145,7 +150,13 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
         SQLEngine.insert("INSERT INTO Library(int_id_user,int_id_draw) VALUES (%s,%s);" % (userId,drawId))
         SQLEngine.close()
 
-        #Antes de cerrar la conexión se debe guardar en 'paralelo' en la base de datos B
+        #Backup Query
+        SQLEngine = MySQLEngine(configFile="backupConfig.ini")
+        SQLEngine.start()
+
+        SQLEngine.insert("INSERT INTO DrawBackup(jso_compressedDraw) VALUES ('%s');" % (jsonCompressed))
+
+        SQLEngine.close()
 
 
     # The parse method adds the contents of an XML file to this sequence
@@ -303,8 +314,11 @@ class DrawingApplication(tkinter.Frame):
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         
+        def download(user,filename):
+            pass
+
         #Aquí se debe aregregar el comando para descargar el dibujo desde la base de datos de Backup.
-        fileMenu.add_command(label="Download",command=None)
+        fileMenu.add_command(label="Download",command=download)
 
         fileMenu.add_command(label="Exit",command=self.master.quit)
         
