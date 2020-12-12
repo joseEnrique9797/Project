@@ -1,3 +1,7 @@
+/*
+    MariaDB version 10.3
+*/
+
 DROP DATABASE IF EXISTS ProjectBD1;
 CREATE DATABASE IF NOT EXISTS ProjectBD1 CHARACTER SET utf8;
 USE ProjectBD1;
@@ -16,13 +20,6 @@ CREATE TABLE IF NOT EXISTS canvas_config(
     var_pen_color VARCHAR(20) DEFAULT "#000000", 
     var_fill_color VARCHAR(20) DEFAULT "#000000"
 );
-
-    
-CREATE TABLE IF NOT EXISTS Action_type(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    var_description VARCHAR(200) COMMENT "Describe el tipo de accion que se registrara en la bitacora."
-);
-
 
 
 CREATE TABLE IF NOT EXISTS Draw(
@@ -44,12 +41,10 @@ CREATE TABLE IF NOT EXISTS Library(
 CREATE TABLE IF NOT EXISTS Binnacle(
     id INT AUTO_INCREMENT PRIMARY KEY,
     int_id_user_binn INT NOT NULL COMMENT "Llave foranea hacia la tabla users.",
-    int_id_action_type INT NOT NULL COMMENT "Llave foranea hacia la tabla action_type.",
     FOREIGN KEY (int_id_user_binn) REFERENCES User(id),
-    FOREIGN KEY (int_id_action_type) REFERENCES Action_type(id)
+    `action` VARCHAR(200) NOT NULL COMMENT "Action echa por el usuario",
+    `create` TIMESTAMP DEFAULT NOW() COMMENT "Fecha de captura de la accion"
 );
-
-USE ProjectBD1;
 
 INSERT INTO User (var_userName,var_password,bit_admin) VALUES ("admin","admin",1);
 INSERT INTO canvas_config() VALUES ();
