@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS User(
 
 CREATE TABLE IF NOT EXISTS canvas_config(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    var_pen_color VARCHAR(20), 
-    var_fill_color VARCHAR(20)
+    var_pen_color VARCHAR(20) DEFAULT "#000000", 
+    var_fill_color VARCHAR(20) DEFAULT "#000000"
 );
 
     
@@ -52,3 +52,4 @@ CREATE TABLE IF NOT EXISTS Binnacle(
 USE ProjectBD1;
 
 INSERT INTO User (var_userName,var_password,bit_admin) VALUES ("admin","admin",1);
+INSERT INTO canvas_config() VALUES ();

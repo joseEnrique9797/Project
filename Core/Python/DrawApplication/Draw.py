@@ -424,8 +424,14 @@ class DrawingApplication(tkinter.Frame):
         penColor = tkinter.StringVar()
         penEntry = tkinter.Entry(sideBar,textvariable=penColor)
         penEntry.pack()
-        # This is the color black.
-        penColor.set("#000000")  
+        
+        # Obtener el valor por defecto desde la base de datos.
+        SQLEngine = MySQLEngine()
+        SQLEngine.start()
+        pen,fill = SQLEngine.select("SELECT var_pen_color,var_fill_color FROM canvas_config WHERE id = 1;")[0]
+        SQLEngine.close()
+
+        penColor.set(pen)  
         
         def getPenColor():
             color = tkinter.colorchooser.askcolor()
@@ -440,7 +446,7 @@ class DrawingApplication(tkinter.Frame):
         fillColor = tkinter.StringVar()
         fillEntry = tkinter.Entry(sideBar,textvariable=fillColor)
         fillEntry.pack()
-        fillColor.set("#000000")     
+        fillColor.set(fill)     
         
         def getFillColor():
             color = tkinter.colorchooser.askcolor()
@@ -489,8 +495,17 @@ class DrawingApplication(tkinter.Frame):
         penDownButton = tkinter.Button(sideBar, text = "Pen Down", command=penDownHandler)
         penDownButton.pack(fill=tkinter.BOTH)
 
+        def canvasColorConfig():
+            pen = penColor.get()
+            fill = fillColor.get()
+            SQLEngine = MySQLEngine()
+            SQLEngine.start()
+            SQLEngine.insert("UPDATE canvas_config SET var_pen_color = '%s', var_fill_color = '%s' WHERE id = 1;" % (pen,fill))
+            SQLEngine.close()
+
+
         # Aqui se de debe ingresar la función que hará el llamado a la ventana de administración de Usuarios
-        colorConfig = tkinter.Button(sideBar, text = "Set Default Color", command=None)
+        colorConfig = tkinter.Button(sideBar, text = "Set Default Colors", command=canvasColorConfig)
         colorConfig.pack(fill=tkinter.BOTH)
 
         # Si el usuario no es Administrador entonces se deshabilita el menu de configuración
