@@ -25,6 +25,7 @@ class loadGUI:
     def __init__(self,user_id):
         self.app = Tk()
         self.data = None
+        self.fileName = None
 
         #Título de la ventana
         self.app.title('Load')
@@ -79,6 +80,7 @@ class loadGUI:
     
     def load(self):
         imageName = self.combo.get()
+        self.fileName = imageName
         if not imageName:
             messagebox.showerror('Error', 'Seleccione una imagen de la lista, si la lista esta vacia oprima Cancel')
         else:

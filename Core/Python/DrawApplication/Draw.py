@@ -213,6 +213,7 @@ class DrawingApplication(tkinter.Frame):
         super().__init__(master)
         self.userType = userType
         self.userId = userId
+        self.loadedImageName = None
         self.pack()
         self.buildWindow()    
         self.graphicsCommands = GraphicsSequence()
@@ -264,6 +265,7 @@ class DrawingApplication(tkinter.Frame):
 
             #Aqui se debe realizar el query para obtener el json y luego mandarlo al parser
             self.graphicsCommands.parse(load.data)
+            self.loadedImageName = load.fileName
                
             for cmd in self.graphicsCommands:
                 cmd.draw(theTurtle)
@@ -314,8 +316,23 @@ class DrawingApplication(tkinter.Frame):
             
         fileMenu.add_command(label="Save As...",command=saveFile)
         
-        def download(user,filename):
-            pass
+        def download():
+            # Obtener la ruta en la que se desea descargar el archivo
+            savePath = tkinter.filedialog.asksaveasfilename(initialfile=self.loadedImageName,title="Descargar Archivo en: ")
+            savePath = "%s.json" % savePath
+
+            # Se inicia el motor SQL para llamar al procedimiento almacenado que devolvera el archivo
+            # comprimido en la base de datos de respaldo
+            SQLEngine = MySQLEngine("backupConfig.ini")
+            SQLEngine.start()
+            result = ""
+            answer = SQLEngine.callProcedure("sp_download",self.userId,self.loadedImageName,result)
+            SQLEngine.close()
+
+            # Se escribe el contenido en la ruta seleccionada
+            f = open(savePath, "w")
+            f.write("%s" % answer[2])
+            f.close()
 
         #Aquí se debe aregregar el comando para descargar el dibujo desde la base de datos de Backup.
         fileMenu.add_command(label="Download",command=download)
