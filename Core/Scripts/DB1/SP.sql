@@ -13,6 +13,7 @@ DELIMITER $$
                 SELECT @SELECTED INTO userId;
                 SELECT (SELECT bit_admin FROM User WHERE id = @SELECTED) INTO userAdmin;
                 SELECT 1 INTO result;
+                COMMIT;
             ELSE 
                 SELECT 0 INTO result;
         END IF;
@@ -27,6 +28,7 @@ DELIMITER $$
     BEGIN
         UPDATE User SET var_userName = userName, var_password = userPassword, enu_state = "active" WHERE id = userId;
         INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "Los campos del Usuario han sido actualizados");
+        COMMIT;
     END $$
 
 DELIMITER ;
@@ -39,11 +41,14 @@ DELIMITER $$
         IF  ((SELECT enu_state FROM User WHERE id = userId) = "active") 
             THEN                 
                 UPDATE User SET enu_state = "inactive" WHERE id = userId;
+                COMMIT;
             ELSE 
                 UPDATE User SET enu_state = "active" WHERE id = userId;
+                COMMIT;
         END IF;
 
         INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El estado del Usuario ha sido actualizado");
+        COMMIT;
     END $$
 
 DELIMITER ;
@@ -58,7 +63,8 @@ DELIMITER $$
             THEN                 
                 INSERT INTO Draw (var_name, jso_data) VALUES (drawName, drawData);                
                 SELECT (SELECT id FROM Draw ORDER BY id DESC LIMIT 1) INTO result;
-                INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha creado un nuevo dibujo");                
+                INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha creado un nuevo dibujo");    
+                COMMIT;
             ELSE 
                 SELECT 0 INTO result;
         END IF;
@@ -73,7 +79,8 @@ DELIMITER $$
     CREATE PROCEDURE changeCanvasConfig (IN userId INT, IN penColor VARCHAR(20), IN fillColor VARCHAR(20))
     BEGIN        
         UPDATE canvas_config SET var_pen_color = penColor, var_fill_color = fillColor WHERE id = 1;
-        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha actualizado la configuracion del pincel");     
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha actualizado la configuracion del pincel");  
+        COMMIT;
     END $$
 
 DELIMITER ;
@@ -85,7 +92,7 @@ DELIMITER $$
     CREATE PROCEDURE getCanvasConfig (OUT Pen VARCHAR(20), OUT Fill VARCHAR(20))
     BEGIN        
         SELECT (SELECT var_pen_color FROM canvas_config WHERE id = 1) INTO Pen;
-        SELECT (SELECT var_fill_color FROM canvas_config WHERE id = 1) INTO Pen;  
+        SELECT (SELECT var_fill_color FROM canvas_config WHERE id = 1) INTO Fill;  
     END $$
 
 DELIMITER ;
