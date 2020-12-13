@@ -144,8 +144,9 @@ class GraphicsSequence: #La secuencia de acciones (al dibujar) realizadas por el
         SQLEngine.start()
 
         #Se guarda el dibujo, y se obtiene el id del registro agregado
-        drawId = SQLEngine.insert("INSERT INTO Draw(var_name, jso_data) VALUES ('%s','%s');" % (filename,json))
-
+        drawId = 0
+        result = SQLEngine.callProcedure("newDraw", userId, filename, json, drawId)
+        drawId = result[-1]
         #Se inserta la referencia en la Libreria del Usuario
         SQLEngine.insert("INSERT INTO Library(int_id_user,int_id_draw) VALUES (%s,%s);" % (userId,drawId))
         SQLEngine.close()

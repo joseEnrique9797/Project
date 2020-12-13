@@ -13,8 +13,3 @@ DELIMITER $$
     END $$
 
 DELIMITER ;
-
-/*
-INSERT INTO User (var_userName,var_password,bit_admin) VALUES ("Lexer Ochoa","aassadma",1);
-SELECT * from Binnacle;
-/**/

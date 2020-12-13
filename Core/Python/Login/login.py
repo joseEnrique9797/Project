@@ -98,7 +98,7 @@ class loginGUI:
 
             #Se Ejecuta el llamado a la aplicación de Dibujo
             root = tkinter.Tk()  
-            drawingApp = DrawingApplication(root,result[0][3],result[0][0])
+            drawingApp = DrawingApplication(root,result[-2],result[-3])
             drawingApp.run()
         else:
             messagebox.showerror('Error', 'El Usuario no Existe o esta Inactivo')
