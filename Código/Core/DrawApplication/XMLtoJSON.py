@@ -2,9 +2,7 @@
 @author Kenneth Cruz
 @date 2020-28-11
 @version 1.0
--------------------
-<Command x="-196.0" y="117.0" width="1" color="#000000">GoTo</Command>
-{command:"GoTo", x:"-196.0", y:"117.0", width:"1", color"#000000"}
+
 """
 
 import re 

@@ -8,8 +8,8 @@
 
 from tkinter import *
 from tkinter import messagebox 
-from Core.Python.DrawApplication.Draw import *
-from Core.Python.MySQLEngine import *
+from Core.DrawApplication.Draw import *
+from Core.MySQLEngine import *
 
 """
     loginGUI: Objeto para crear una ventana de Login

@@ -3,9 +3,6 @@
 @date 2020-29-11
 @version 1.0
 
--------------------
-{command:"GoTo", x:"-196.0", y:"117.0", width:"1", color"#000000"}
-<Command x="-196.0" y="117.0" width="1" color="#000000">GoTo</Command>
 """
 
 import xml.etree.ElementTree as xmlTree

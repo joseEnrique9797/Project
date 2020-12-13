@@ -6,12 +6,12 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 import xml.dom.minidom
-from Core.Python.DrawApplication.XMLtoJSON import *
-from Core.Python.DrawApplication.JSONtoXML import *
+from Core.DrawApplication.XMLtoJSON import *
+from Core.DrawApplication.JSONtoXML import *
 from ..MySQLEngine import *
 from ..UserManager.mainView import *
 from ..Compress.compress import *
-from Core.Python.DrawApplication.load import *
+from Core.DrawApplication.load import *
 from tkinter.simpledialog import askstring
 
 # The following classes define the different commands that 

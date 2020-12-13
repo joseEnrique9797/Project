@@ -26,7 +26,7 @@ class MySQLEngine:
         config = configparser.ConfigParser()
 
         # Se lee el archivo de configuración config.ini
-        config.read('Core/Scripts/%s' % configFile)
+        config.read('../Scripts de Base de Datos/%s' % configFile)
 
         # Se recuperan los valores de configuración desde el objeto config
         self.host = config.get('MariaDB Server','host')

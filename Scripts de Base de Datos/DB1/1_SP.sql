@@ -9,7 +9,7 @@ DELIMITER $$
             THEN 
                 SET @SELECTED = 0;                
                 SELECT (SELECT id FROM User WHERE var_userName = userName AND var_password = userPassword LIMIT 1) INTO @SELECTED;                
-                INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (@SELECTED, "El usuario ha iniciado Session");                
+                INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (@SELECTED, "El usuario ha iniciado Sesión");                
                 SELECT @SELECTED INTO userId;
                 SELECT (SELECT bit_admin FROM User WHERE id = @SELECTED) INTO userAdmin;
                 SELECT 1 INTO result;
@@ -66,7 +66,7 @@ DELIMITER $$
                 COMMIT;
         END IF;
 
-        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El estado del Usuario ha sido actualizado");
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "Los privilegios del Usuario han sido actualizados");
         COMMIT;
     END $$
 
@@ -115,4 +115,3 @@ DELIMITER $$
     END $$
 
 DELIMITER ;
-

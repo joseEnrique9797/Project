@@ -8,10 +8,8 @@
 
 from tkinter import *
 from tkinter import ttk
-#import tkinter as tk
 from tkinter import messagebox 
-#from Draw import *
-from  Core.Python.MySQLEngine import * 
+from  Core.MySQLEngine import * 
 import json
 
 """
@@ -58,7 +56,6 @@ class loadGUI:
         #Consulta SQL para buscar al usuario 
         _id = user_id
         result = SQLEngine.select("SELECT Draw.var_name as 'nombre' FROM Library JOIN Draw ON Library.int_id_draw = Draw.id WHERE int_id_user = %s;" % _id)
-        print('------------------------------------',result)
         
         for rec in result:
             options.append(rec)

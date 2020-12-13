@@ -10,7 +10,6 @@ from tkinter import *
 from tkinter import messagebox 
 from tkinter import ttk 
 import tkinter.font as tkFont
-#from Core.Python.DrawApplication.Draw import *
 from ..MySQLEngine import *
 
 """
