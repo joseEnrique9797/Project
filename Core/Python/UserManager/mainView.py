@@ -115,16 +115,8 @@ class userManagerGUI:
             index = int(self.dataView.item(self.dataView.selection())['text'])
             
             self.SQLEngine.start()
-
-            status =self.SQLEngine.select("SELECT enu_state FROM User WHERE id=%s;" % str(index),fetchOne=True)[0]
-            
-            if status == 'active':
-                self.SQLEngine.insert("UPDATE User SET enu_state='inactive' WHERE id = %s;" % str(index))
-            else:
-                self.SQLEngine.insert("UPDATE User SET enu_state='active' WHERE id = %s;" % str(index))
-
-            self.SQLEngine.close()
-            
+            self.SQLEngine.callProcedure("userChangeState", index)
+            self.SQLEngine.close()            
             self.refreshDataView()
             
             self.dataView.selection_remove(self.dataView.selection())
@@ -144,18 +136,9 @@ class userManagerGUI:
             index = int(self.dataView.item(self.dataView.selection())['text'])
             
             self.SQLEngine.start()
-
-            privilegeLevel = self.SQLEngine.select("SELECT bit_admin FROM User WHERE id=%s;" % str(index),fetchOne=True)[0]
-            
-            if privilegeLevel == 0:
-                self.SQLEngine.insert("UPDATE User SET bit_admin = 1 WHERE id = %s;" % str(index))
-            else:
-                self.SQLEngine.insert("UPDATE User SET bit_admin = 0 WHERE id = %s;" % str(index))
-
-            self.SQLEngine.close()
-            
-            self.refreshDataView()
-            
+            self.SQLEngine.callProcedure("userChangeAdmin", index)
+            self.SQLEngine.close()            
+            self.refreshDataView()            
             self.dataView.selection_remove(self.dataView.selection())
         else:
             messagebox.showerror("Error","No se ha seleccionado ningún usuario")

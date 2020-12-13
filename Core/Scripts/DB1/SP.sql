@@ -53,6 +53,25 @@ DELIMITER $$
 
 DELIMITER ;
 
+DELIMITER $$
+    DROP PROCEDURE IF EXISTS userChangeAdmin;
+    CREATE PROCEDURE userChangeAdmin (IN userId INT)
+    BEGIN
+        IF  ((SELECT bit_admin FROM User WHERE id = userId) = 1) 
+            THEN                 
+                UPDATE User SET bit_admin = 0 WHERE id = userId;
+                COMMIT;
+            ELSE 
+                UPDATE User SET bit_admin = 1 WHERE id = userId;
+                COMMIT;
+        END IF;
+
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El estado del Usuario ha sido actualizado");
+        COMMIT;
+    END $$
+
+DELIMITER ;
+
 
 DELIMITER $$
 
