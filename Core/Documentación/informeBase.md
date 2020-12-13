@@ -13,7 +13,8 @@
 <br>
 
 # 1. Diseño de la base de datos.
-![](http://drive.google.com/uc?export=view&id=1WH4bsoH-H4DISCJUIn2AE_WjpWiJCWbV)
+![](https://drive.google.com/uc?export=view&id=1WH4bsoH-H4DISCJUIn2AE_WjpWiJCWbV)
+
 Al momento del diseño de la base de datos se implemento un diseño que fuera orientado a las necesidades que se tenian que cumplir, con los siguientes factores:
 - Cumplimiento de las reglas de integridad.
 - Poder realizar consultas de información eficientes.

@@ -83,14 +83,21 @@ class loginGUI:
 
         #Consulta SQL para verificar el usuario
         answer = 0
-        result = SQLEngine.callProcedure("userLog",userName,password,answer)
+        adm = 0
+        index = 0
+        
+        result = SQLEngine.callProcedure("userLog",userName,password,index,adm,answer)
         
         #Se cierra la conexión con la base de datos
         SQLEngine.close()
-        
-        print(result[-1])
-        print(answer)
 
+        #Respuesta
+        print(result[-1])
+        #Es o no Admin
+        print(result[-2])
+        #Id del usuario
+        print(result[-3])
+        
         #Si el valor retornado es 1 el usuario existe y esta activo
         if result[-1]:
             self.app.destroy()
