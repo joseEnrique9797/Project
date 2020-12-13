@@ -82,12 +82,17 @@ class loginGUI:
         SQLEngine.start()
 
         #Consulta SQL para buscar al usuario 
-        result = SQLEngine.select("SELECT User.id,User.var_userName, User.var_password,User.bit_admin,User.enu_state FROM User WHERE User.var_userName LIKE '%s';" % userName)
-        SQLEngine.conector.commit()
-        SQLEngine.link.reset()
+        answer = 0
+        result = SQLEngine.callProcedure("userLog",userName,password,answer)
+        #result = SQLEngine.select("SELECT User.id,User.var_userName, User.var_password,User.bit_admin,User.enu_state FROM User WHERE User.var_userName LIKE '%s';" % userName)
+        #SQLEngine.conector.commit()
+        #SQLEngine.link.reset()
         
         #Se cierra la conexión con la base de datos
         SQLEngine.close()
+        
+        print(result[-1])
+        print(answer)
 
         #Si se encuentra un usuario se procede a verificar que la contraseña sea la misma
         if result:
@@ -103,6 +108,7 @@ class loginGUI:
                 messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
         else:
             messagebox.showerror('Error', 'El Usuario no Existe')
+
 
     """
         run: Ejecuta la venta de Login

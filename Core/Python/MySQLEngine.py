@@ -74,7 +74,6 @@ class MySQLEngine:
         return self.link.lastrowid
 
     def callProcedure(self,name,*args):
-        print(args)
         return self.link.callproc(name,args)
 
 
