@@ -204,7 +204,7 @@ class userManagerGUI:
             
             if status == 'inactive':
                 messagebox.showinfo("Alerta","El Usuario inactivo se activara para poder editar sus campos")
-                self.SQLEngine.insert("UPDATE User SET enu_state='active' WHERE id = %s;" % str(index))
+                self.SQLEngine.callProcedure("userChangeState", index)
 
             username,password = self.SQLEngine.select("SELECT var_userName, var_password FROM User WHERE id = %s;" % str(index))[0]
             self.refreshDataView()
@@ -226,7 +226,7 @@ class userManagerGUI:
             password = self.editPassword.get()
             
             self.SQLEngine.start()
-            self.SQLEngine.insert("UPDATE User SET var_userName='%s', var_password='%s' WHERE id = %s;" % (userName,password,str(index)))
+            self.SQLEngine.callProcedure("userUpdate", index, userName, password)
             self.SQLEngine.close()
          
             self.refreshDataView()

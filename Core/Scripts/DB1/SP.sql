@@ -5,7 +5,7 @@ DELIMITER $$
     CREATE PROCEDURE userLog (IN userName VARCHAR(200), IN userPassword VARCHAR(200), OUT result BIT)
     BEGIN
 
-        IF  ((SELECT COUNT(*) FROM User WHERE var_userName = userName AND var_password = userPassword) = 1) 
+        IF  ((SELECT COUNT(*) FROM User WHERE var_userName = userName AND var_password = userPassword AND enu_state = "active") = 1) 
             THEN 
                 SET @SELECTED = 0;                
                 SELECT (SELECT id FROM User WHERE var_userName = userName AND var_password = userPassword LIMIT 1) INTO @SELECTED;                
@@ -14,6 +14,34 @@ DELIMITER $$
             ELSE 
                 SELECT 0 INTO result;
         END IF;
+    END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+    DROP PROCEDURE IF EXISTS userUpdate;
+    CREATE PROCEDURE userUpdate (IN userId INT, IN userName VARCHAR(200), IN userPassword VARCHAR(200))
+    BEGIN
+        UPDATE User SET var_userName = userName, var_password = userPassword, enu_state = "active" WHERE id = userId
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "Los campos del Usuario han sido actualizados");
+    END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+    DROP PROCEDURE IF EXISTS userChangeState;
+    CREATE PROCEDURE userUpdate (IN userId INT)
+    BEGIN
+        IF  ((SELECT enu_state FROM User WHERE id = userId) = "active") 
+            THEN                 
+                UPDATE User SET enu_state = "inactive" WHERE id = userId;
+            ELSE 
+                UPDATE User SET enu_state = "active" WHERE id = userId;
+        END IF;
+
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El estado del Usuario ha sido actualizado");
     END $$
 
 DELIMITER ;
@@ -39,16 +67,26 @@ DELIMITER ;
 
 DELIMITER $$
 
-    DROP PROCEDURE IF EXISTS addCanvasConfig;
-    CREATE PROCEDURE addCanvasConfig (IN userId INT, IN penColor VARCHAR(20), IN fillColor VARCHAR(20))
+    DROP PROCEDURE IF EXISTS changeCanvasConfig;
+    CREATE PROCEDURE changeCanvasConfig (IN userId INT, IN penColor VARCHAR(20), IN fillColor VARCHAR(20))
     BEGIN        
-        INSERT INTO canvas_config (var_pen_color, var_fill_color) VALUES (penColor, fillColor);                
-        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha creado una nueva configuracion del pincel");     
+        UPDATE canvas_config SET var_pen_color = penColor, var_fill_color = fillColor WHERE id = 1;
+        INSERT INTO Binnacle (int_id_user_binn, `action`) VALUES (userId, "El usuario ha actualizado la configuracion del pincel");     
     END $$
 
 DELIMITER ;
 
 
+DELIMITER $$
+
+    DROP PROCEDURE IF EXISTS getCanvasConfig;
+    CREATE PROCEDURE getCanvasConfig (OUT Pen VARCHAR(20), OUT Fill VARCHAR(20))
+    BEGIN        
+        SELECT (SELECT var_pen_color FROM canvas_config WHERE id = 1) INTO Pen;
+        SELECT (SELECT var_fill_color FROM canvas_config WHERE id = 1) INTO Pen;  
+    END $$
+
+DELIMITER ;
 
 
 

@@ -428,7 +428,11 @@ class DrawingApplication(tkinter.Frame):
         # Obtener el valor por defecto desde la base de datos.
         SQLEngine = MySQLEngine()
         SQLEngine.start()
-        pen,fill = SQLEngine.select("SELECT var_pen_color,var_fill_color FROM canvas_config WHERE id = 1;")[0]
+        pen = ""
+        fill = ""
+        result = SQLEngine.callProcedure("getCanvasConfig",pen,fill)
+        pen = result[0]
+        fill = result[1]
         SQLEngine.close()
 
         penColor.set(pen)  
@@ -500,7 +504,7 @@ class DrawingApplication(tkinter.Frame):
             fill = fillColor.get()
             SQLEngine = MySQLEngine()
             SQLEngine.start()
-            SQLEngine.insert("UPDATE canvas_config SET var_pen_color = '%s', var_fill_color = '%s' WHERE id = 1;" % (pen,fill))
+            SQLEngine.callProcedure("changeCanvasConfig", self.userId, pen, fill)
             SQLEngine.close()
 
 

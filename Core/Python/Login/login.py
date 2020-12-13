@@ -81,12 +81,9 @@ class loginGUI:
         SQLEngine = MySQLEngine()
         SQLEngine.start()
 
-        #Consulta SQL para buscar al usuario 
+        #Consulta SQL para verificar el usuario
         answer = 0
         result = SQLEngine.callProcedure("userLog",userName,password,answer)
-        #result = SQLEngine.select("SELECT User.id,User.var_userName, User.var_password,User.bit_admin,User.enu_state FROM User WHERE User.var_userName LIKE '%s';" % userName)
-        #SQLEngine.conector.commit()
-        #SQLEngine.link.reset()
         
         #Se cierra la conexión con la base de datos
         SQLEngine.close()
@@ -94,20 +91,17 @@ class loginGUI:
         print(result[-1])
         print(answer)
 
-        #Si se encuentra un usuario se procede a verificar que la contraseña sea la misma
-        if result:
-            if result[0][2] == password and result[0][4] == "active":
-                self.app.destroy()
-                print("Login Executed Successfully.")
+        #Si el valor retornado es 1 el usuario existe y esta activo
+        if result[-1]:
+            self.app.destroy()
+            print("Login Executed Successfully.")
 
-                #Se Ejecuta el llamado a la aplicación de Dibujo
-                root = tkinter.Tk()  
-                drawingApp = DrawingApplication(root,result[0][3],result[0][0])
-                drawingApp.run()
-            else:
-                messagebox.showerror('Error', 'Nombre de Usuario o contraseña no válidas')
+            #Se Ejecuta el llamado a la aplicación de Dibujo
+            root = tkinter.Tk()  
+            drawingApp = DrawingApplication(root,result[0][3],result[0][0])
+            drawingApp.run()
         else:
-            messagebox.showerror('Error', 'El Usuario no Existe')
+            messagebox.showerror('Error', 'El Usuario no Existe o esta Inactivo')
 
 
     """
