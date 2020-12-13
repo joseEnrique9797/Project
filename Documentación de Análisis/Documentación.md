@@ -1,8 +1,48 @@
+![](https://drive.google.com/uc?export=view&id=1Qu-APxzuxSfM3833RYhRD8MrbezlyJVs)
+
+---
+
+# Índice
+
+[**1. Breve Explicación de los archivos**](#-Breve-Explicación-de-los-Archivos)
+* [La Carpeta Scripts](#1-la-carpeta-scripts)
+* [La Carpeta Core](#2-la-carpeta-core)
+  * [Login](#login)
+  * [Draw Application](#drawapplication)
+  * [User Manager](#usermanager)
+  * [Compress](#compress)
+  * [MySQLEngine.py](#mysqlenginepy)
+
+[**2. Base de Datos**](#base-de-datos)
+* [ProjectBD1](#projectbd1)
+  * [Descripción de las Tablas Empleadas](#descripción-de-las-tablas-empleadas)
+  * [Modelado](#modelado-de-la-base-de-datos)
+  * [Diagramado](#diagramado-de-la-base-de-datos)
+* [ProjectBD1_Backup](#projectbd1_backup)
+  * [Modelado](#modelado-de-la-base-de-datos-2)
+  * [Diagramado](#diagramado-de-la-base-de-datos-2)
+
+[**3. Explicación sobre Algunas Clases y Funciones**](#explicación-sobre-algunas-clases-y-funciones)
+* [Clase MySQLEngine](#clase-mysqlengine)
+  * [Constructor](#constructor)
+  * [Función Start](#función-start)
+  * [Función Select](#función-select)
+  * [Función Insert](#función-insert)
+  * [Función CallProcedure](#función-callprocedure)
+  * [Función Close](#función-close)
+* [Clase Compress](#clase-compress)
+  * [Importaciones](#importaciones)
+  * [Constructor](#constructor-compress)
+  * [Función jsonZip](#función-jsonzip)
+  * [Función jsonUnzip](#función-jsonunzip)
+
+---
+
 # Breve Explicación de los Archivos
 
 **En este apartado se detalla el funcionamiento de cada uno de los componentes del sistema y como se debe ejecutar el proyecto**
 
-## 1. La Carpeta Core/Scripts
+## 1. La Carpeta Scripts
 
 La carpeta Scripts contiene todas las definiciones necesarias para crear la base de datos **ProjectBD1**, sus procedimientos almacenados, sus Triggers e Inserciones, de igual manera la base de datos **ProjectBD1_Backup** y sus procedimientos almacenados.
 
@@ -13,7 +53,7 @@ La carpeta Scripts contiene todas las definiciones necesarias para crear la base
 
 Los documentos **config.ini** y **backupConfig.ini** contienen los parámetros para establecer la conexión hacia las bases de datos antes descritas los cuales deben ser modificados de acuerdo a la configuración del usuario final.
 
-## 2. La Carpeta Core/Python
+## 2. La Carpeta Core
 
 Dentro de esta carpeta se encuentran todos los documentos necesarios para ejecutar el programa.
 
@@ -70,6 +110,8 @@ Aquí se encuentra el "motor" que provee las funciones de:
 * Realizar consultas (queries) de selección e inserción hacia la base de datos.
 * Realizar llamados a procedimientos almacenados en la base de datos.
 
+---
+
 # Base de Datos
 
 ## **ProjectBD1**
@@ -97,20 +139,20 @@ Al momento del diseño de la base de datos se implemento un diseño que fuera or
 
 ### Diagramado de la Base de Datos
 
-        Aquí va el diagramado de la base de datos.
+![](https://drive.google.com/uc?export=view&id=1GvzBncY66bd6pY4QPI98nO5bV_u84tDi)
 
 ## **ProjectBD1_Backup**
 
 Esta base de datos almacena una versión compresa de cada imagen guardada por los usuarios, esta versión se almacena en forma de JSON según las especificaciones del ptoyecto.
 
-### **Modelado de la Base de Datos**
+### **Modelado de la Base de Datos 2**
 
 ![](https://drive.google.com/uc?export=view&id=1nx7XhrfGj04BmkEftidL8Qs-o-aWetSD)
 
 * **id**: Es la llave primaria de la tabla DrawBackup.
 * **jso_draw**: Es el json que contiene la versión equivalente comprimida de cada dibujo de los usuarios. El JSON contiene metadata (Id de Usuario y Nombre de la Imagen) que servirá para identificarla al momento de su descarga a través de un procedimiento almacenado.
 
-### **Diagramado de la Base de Datos**
+### **Diagramado de la Base de Datos 2**
 
 ![](https://drive.google.com/uc?export=view&id=1EQZAps7kxdKCIZyDKOEnDsex2S-fHju5)
 
@@ -231,7 +273,7 @@ import zlib, json, base64
 * **json**: Contiene funciones para trabajar con objetos de tipo json, como por ejemplo json.dumps() la cual convierte un objeto JSON a cadena de texto.
 * **base64**: Contiene funciones para convertir bytes que tienen datos binarios o de texto en caracteres ASCII.
 
-### **Constructor**
+### **Constructor compress**
 ```python
 def __init__(self,fileName,userId):
         self.fileName = fileName
