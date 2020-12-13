@@ -35,6 +35,8 @@
   * [Constructor](#constructor-compress)
   * [Función jsonZip](#función-jsonzip)
   * [Función jsonUnzip](#función-jsonunzip)
+* [XMLtoJSON](#xmltojson)
+* [JSONtoXML](#jsontoxml)
 
 ---
 
@@ -323,3 +325,91 @@ def jsonUnzip(self,j, insist=True):
 ```
 
 La función jsonUnzip se utiliza para descomprimir un JSON comprimido por la función jsonZip, recibe una cadena de Texto con formato de JSON y un flag insist el cual es utilizado para suprimir los errores en tiempo de ejecución (Runtime Error) que puedan ocurrir. 
+
+## **XMLtoJSON**
+
+Como parte fundamental de los componentes requeridos dentro de la funcionalidad del programa se requiere lo siguiente:
+
+>reemplazando y sustituyendo los componentes de de almacenamiento de datos del programa los cuales usan XML, y en su lugar creando almacenamiento de datos mediante JSON en una base de datos A  
+
+En primera instancia el programa guarda los archivos de dibujo en formato XML, dado su estructura jerárquica de tipo árbol surgió la necesidad de implementar un algoritmo para descomponer cada elemento (tags con sus atributo) en una tupla de componentes (a, b) para 
+ser transformadas en una estructura de tipo diccionario. 
+
+
+Se utilizó dos libería python (re, json) para la implementación del código. 
+
+La estructura del arhivo XML es la siguiente:
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<GraphicsCommands>
+    <Command x="-196.0" y="117.0" width="1" color="#000000">GoTo</Command>
+    <Command x="63.0" y="126.0" width="1" color="#000000">GoTo</Command>
+```
+
+La salida será como sigue: 
+
+```json
+{"command":"GoTo", "x":-196.0,"y":117.0,"width":1, "color":"#000000"}
+```
+
+Mediante estas funciones (firma de las funciones) se obtiene los atributos y nombres de las etiquetas: 
+
+```python
+stringProcess(string) 
+tags() 
+tagname(tag)
+attributeProcess(tag, tagname) 
+```
+
+Por cada una de las iteraciones del ciclo se procesa una etiqueta *Command* del XML se procesan los atributos y los valores de estos en un par de componentes, también se identifica el título de estas etiquetas, existen varios tipos que se generan en el canvas del programa principal en el momento de su creación (dibujo): 
+1. GoTo
+2. PenDown
+3. PenUp
+4. EndFill
+5. BeginFill
+
+Estos nombres son esenciales para la identificación de cada etiqueta. 
+
+El diccionario se crea mediante las siguientes funciones: 
+
+```python
+getArray(process, tagname)
+getDictionary(array)
+```
+
+La función getArray espera un arreglo con cada uno de los atributos de la etiqueta Command, ambos componentes en forma de cadena ('x="155.0"'), el seguno parametro es el título de la etiqueta (GoTo, PenDown...)
+
+La función getDictionary toma el arreglo anterior descrito, transformado cada una de sus componentes (a, b) asignandolas a una relación de tipo clave  valor, es decir: 
+
+```python
+clave[index][0]:valor[index][1] 
+```
+
+
+Listo estos componentes hará falta una función que haga uso de estas utilidades y funcionanlidades condensadas en una unidad de forma encapsulda haciendo uso de programación orientada a objetos.
+
+```python
+process()
+createJSON()
+```
+
+La función process hace un llamado y uso de cada componente de las funciones ya descritas, tomando cada una de las lineas, etiquetas, del archivo XML a procesar, por último, una vez obtenido con éxito el diccionario utilizamos el método **dumps** de la librería **json** para crear a partir de nuestro diccionario un **JSON**.
+
+Con la función createJSON generamos nuestro archivo .json y lo creamos en memoria.
+
+
+## **JSONtoXML**
+
+Cuando el usuario requiera materializar o exportar su dibujo habrá que realizar una función inversa que revierta el estado del documento o información de tipo JSON alojada en nuestra  base de datos, es decir convertir estos datos en un documento XML.
+
+Haremos uso de las librerías xml, json y re que proporciona Python.
+
+xml.etree.ElementTree es una API simple y eficiente para analizar y crear datos XML.
+
+XML es un formato de datos jerárquico y la forma más natural de representarlo es con un árbol. ElementTree tiene dos clases para este propósito: ElementTree representa todo el documento XML como un árbol y Element representa un solo nodo en este árbol. Las interacciones con todo el documento generalmente se realizan en el nivel ElementTree. Las interacciones con un solo elemento XML y sus subelementos se realizan en el nivel de elemento.
+
+
+```python
+processJSON(dictionary)
+```
+Establecemos cada uno de los nodos con los atributos y valores de estos atributos que vienen dados en cada uno de los componentes dados por la clave, valor de nuestro diccionario.
